@@ -4,33 +4,96 @@
 
 @layer base {
   body {
-    @apply antialiased text-gray-900 dark:text-gray-100;
+    @apply antialiased text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-950;
+    cursor: default;
   }
 }
 
-/* Custom Glassmorphism Utility */
+/* Premium Glassmorphism Utilities */
 .glass {
-  @apply bg-white/10 backdrop-blur-md border border-white/20;
+  @apply bg-white/40 backdrop-blur-2xl border border-white/40 shadow-[0_8px_32px_0_rgba(31,38,135,0.07)];
 }
 
 .glass-dark {
-  @apply bg-black/20 backdrop-blur-md border border-white/10;
+  @apply bg-black/40 backdrop-blur-2xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)];
 }
 
-/* Smooth Scrolling */
-html {
-  scroll-behavior: smooth;
+.glass-gold {
+  @apply bg-gradient-to-br from-primary/20 to-accent/5 backdrop-blur-xl border border-primary/30 shadow-[0_0_15px_rgba(184,134,11,0.1)];
+}
+
+/* Logo Shimmer Effect */
+.logo-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.logo-shimmer::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    to bottom right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0) 40%,
+    rgba(255, 255, 255, 0.4) 50%,
+    rgba(255, 255, 255, 0) 60%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(45deg);
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-150%) rotate(45deg); }
+  100% { transform: translateX(150%) rotate(45deg); }
+}
+
+/* Golden Glow Effect */
+.glow-gold {
+  box-shadow: 0 0 20px rgba(184, 134, 11, 0.3);
+  transition: box-shadow 0.3s ease;
+}
+
+.glow-gold:hover {
+  box-shadow: 0 0 35px rgba(184, 134, 11, 0.5);
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-gray-100 dark:bg-gray-900;
+  @apply bg-gray-100 dark:bg-gray-950;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-primary/50 rounded-full hover:bg-primary;
+  @apply bg-primary/40 rounded-full hover:bg-primary transition-colors;
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.animate-spin-slow {
+  animation: spin 12s linear infinite;
+}
+
+/* Hide scrollbar */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

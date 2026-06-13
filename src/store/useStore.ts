@@ -15,6 +15,7 @@ interface User {
   full_name?: string;
   phone?: string;
   address?: string;
+  role?: string;
 }
 
 interface AppState {

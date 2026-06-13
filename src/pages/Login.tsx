@@ -38,7 +38,16 @@ const Login = () => {
           email,
           password,
         });
-        if (error) throw error;
+        
+        if (error) {
+          if (error.message === 'Invalid login credentials') {
+            toast.error('Account not found. Please click "Create Account" first.');
+          } else {
+            throw error;
+          }
+          return;
+        }
+        
         toast.success('Welcome back to AV KART!');
         navigate('/');
       } else {
@@ -50,18 +59,28 @@ const Login = () => {
             emailRedirectTo: `${window.location.origin}/`,
           },
         });
+        
         if (error) throw error;
         
         if (data.user) {
+          // Master Admin Check
+          const isMasterAdmin = email === 'adiarivu2006@gmail.com';
+          
           await supabase.from('users').upsert({
             id: data.user.id,
             email: data.user.email!,
-            full_name: fullName,
+            full_name: fullName || (isMasterAdmin ? 'AV Master Admin' : 'Customer'),
+            role: isMasterAdmin ? 'admin' : 'customer'
           }, { onConflict: 'id' });
-        }
 
-        toast.success('Account created! Please check your email for verification.');
-        setIsLogin(true);
+          if (data.session) {
+            toast.success('Account created successfully!');
+            navigate('/');
+          } else {
+            toast.info('Verification email sent! Please check your inbox.');
+            setIsLogin(true);
+          }
+        }
       }
     } catch (error: any) {
       toast.error(error.message);
@@ -125,7 +144,7 @@ const Login = () => {
           <div className="space-y-4 mb-8">
             <button
               onClick={handleGoogleLogin}
-              className="w-full py-3 px-4 bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-xl font-semibold flex items-center justify-center gap-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all shadow-sm"
+              className="w-full py-3 px-4 bg-white dark:bg-gray-900 border dark:border-gray-700 rounded-xl font-semibold flex items-center justify-center gap-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all shadow-sm"
             >
               <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" className="w-5 h-5" />
               <span className="dark:text-white">Continue with Google</span>
@@ -200,6 +219,12 @@ const Login = () => {
               )}
             </button>
           </form>
+          
+          {email === 'adiarivu2006@gmail.com' && isLogin && (
+            <p className="mt-4 text-xs text-center text-primary font-bold bg-primary/10 p-2 rounded-lg">
+              Master Admin ID detected. If you haven't created this account yet, please click "Create Account" above.
+            </p>
+          )}
         </div>
       </motion.div>
     </div>

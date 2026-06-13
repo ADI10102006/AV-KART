@@ -5,6 +5,8 @@ import { ShoppingCart, Heart, Star, ShieldCheck, Truck, RotateCcw, ChevronRight 
 import { supabase } from '../lib/supabase';
 import { useStore } from '../store/useStore';
 import { toast } from 'sonner';
+import ThreeSixtyViewer from '../components/ThreeSixtyViewer';
+import ReviewSection from '../components/ReviewSection';
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -57,19 +59,12 @@ const ProductDetails = () => {
         </nav>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Image Gallery */}
+          {/* 360 Viewer */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="space-y-4"
           >
-            <div className="aspect-square rounded-3xl overflow-hidden bg-gray-100 dark:bg-gray-900 border dark:border-gray-800">
-              <img
-                src={product.image_url}
-                alt={product.title}
-                className="w-full h-full object-cover hover:scale-110 transition-transform duration-700"
-              />
-            </div>
+            <ThreeSixtyViewer imageUrl={product.image_url} title={product.title} />
           </motion.div>
 
           {/* Product Info */}
@@ -107,7 +102,6 @@ const ProductDetails = () => {
               {product.description || "Indulge in the timeless elegance of this handcrafted piece. Designed for those who appreciate the finer things in life, this jewelry combines classic aesthetics with modern craftsmanship."}
             </p>
 
-            {/* Specs */}
             <div className="grid grid-cols-2 gap-4 mb-8">
               <div className="p-4 bg-gray-50 dark:bg-gray-900 rounded-2xl border dark:border-gray-800">
                 <p className="text-xs text-gray-500 dark:text-gray-400 uppercase mb-1">Material</p>
@@ -119,7 +113,6 @@ const ProductDetails = () => {
               </div>
             </div>
 
-            {/* Actions */}
             <div className="flex flex-col sm:flex-row gap-4 mb-10">
               <button
                 onClick={handleAddToCart}
@@ -141,7 +134,6 @@ const ProductDetails = () => {
               </button>
             </div>
 
-            {/* Trust Badges */}
             <div className="grid grid-cols-3 gap-4 pt-8 border-t dark:border-gray-800">
               <div className="text-center">
                 <div className="flex justify-center mb-2 text-primary"><Truck size={24} /></div>
@@ -158,6 +150,9 @@ const ProductDetails = () => {
             </div>
           </motion.div>
         </div>
+
+        {/* Reviews Section */}
+        <ReviewSection productId={product.id} />
       </div>
     </div>
   );
